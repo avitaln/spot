@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <script src="https://unpkg.com/interactjs@1.3.4/dist/interact.min.js"></script>
+    <style>
+      #container-1 {
+        padding: 0px;
+        margin: 0px;
+        width: 400px;
+        height: 400px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: gray;
+        overflow: visible;
+        position: fixed;
+        top: 100px;
+        left: 300px;
+      }
+
+      #container-2 {
+        padding: 0px;
+        margin: 0px;
+        width: 400px;
+        height: 400px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: gray;
+        overflow: hidden;
+        position: fixed;
+        top: 100px;
+        left: 300px;
+        visibility: hidden;
+      }
+
+      #img-container-1 {
+        /*width: 500px;*/
+        /*height: 400px;*/
+        background-color: transparent;
+        color: white;
+        border-width: 0px;
+        border-color: deepskyblue;
+        border-style: solid;
+        user-select: none;
+        /*-webkit-transform: translate(0px, 0px);*/
+        transform: translate(0px, 0px);
+        overflow: visible;
+        position: absolute;
+        z-index: 1;
+        visibility: hidden;
+      }
+
+      #img-container-2 {
+        /*width: 500px;*/
+        /*height: 400px;*/
+        background-color: transparent;
+        color: white;
+        border-width: 0px;
+        border-color: deepskyblue;
+        border-style: solid;
+        user-select: none;
+        /*-webkit-transform: translate(0px, 0px);*/
+        transform: translate(0px, 0px);
+        overflow: hidden;
+        position: absolute;
+        z-index: 2;
+      }
+
+      #image1 {
+        width: 800px;
+        height: 600px;
+      }
+      #image2 {
+        width: 800px;
+        height: 600px;
+      }
+
+    </style>
+  </head>
+
+  <body style="margin:0;padding:0">
+
+    <div id = "container-1">
+      <div id="img-container-1" class="draggable">
+        <!--<img id="image1" src="https://static.wixstatic.com/media/b1ae3f_d5e107ccc9fb43e8a5d77dbb66048f54~mv2_d_4032_3024_s_4_2.jpg"/>-->
+        <img id="image1" src="snauzer.jpg" style="opacity: 0.2;"/>
+      </div>
+    </div>
+
+    <div id = "container-2">
+      <div id="img-container-2" class="draggable">
+        <!--<img id="image1" src="https://static.wixstatic.com/media/b1ae3f_d5e107ccc9fb43e8a5d77dbb66048f54~mv2_d_4032_3024_s_4_2.jpg"/>-->
+        <img id="image2" src="snauzer.jpg"/>
+      </div>
+    </div>
+
+    <script>
+      let img1;
+      let img2;
+
+      window.onload = function() {
+        img1 = document.getElementById("img-container-1");
+        img2 = document.getElementById("img-container-2");
+        setPos(img1, -40, 0);
+        setPos(img2, -40, 0);
+        img1.style.visibility= 'visible';
+        img2.style.visibility= 'visible';
+
+      };
+
+      interact('.draggable')
+        .draggable({
+          // enable inertial throwing
+          inertia: true,
+          // keep the element within the area of it's parent
+          // restrict: {
+          //   restriction: "parent",
+          //   endOnly: true,
+          //   elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+          // },
+          // enable autoScroll
+          autoScroll: false,
+
+          // call this function on every dragmove event
+          onmove: dragMoveListener,
+          // call this function on every dragend event
+          onend: function (event) {
+
+            console.log(event.pageX);
+            console.log(event.pageY);
+
+            // const textEl = event.target.querySelector('p');
+            //
+            // textEl && (textEl.textContent =
+            //   'moved a distance of '
+            //   + (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+            //   Math.pow(event.pageY - event.y0, 2) | 0))
+            //     .toFixed(2) + 'px');
+          }
+        });
+
+      function dragMoveListener (event) {
+        const target = event.target,
+
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+        // setPos(target, x, y);
+        setPos(img1, x, y);
+        setPos(img2, x, y);
+      }
+
+      function setPos(element, x, y) {
+        // translate the element
+        // element.style.webkitTransform = 'translate(' + x + 'px, ' + y + 'px)';
+        element.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+        // update the posiion attributes
+        element.setAttribute('data-x', x);
+        element.setAttribute('data-y', y);
+      }
+
+
+      // this is used later in the resizing and gesture demos
+      window.dragMoveListener = dragMoveListener;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+  <style>
+    img:hover {
+      box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+  </style>
+</head>
+
+<body style="margin: 0px">
+
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--3-col">
+    <form action="#" style="padding: 20px;">
+      <div>
+        <label>Choose dimension: </label>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="dimclick(3,4)">3x4</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="dimclick(4,4)">4x4</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="dimclick(4,3)">4x3</button>
+      </div>
+
+      <br>
+
+      <div>
+        <label>Choose picture: </label>
+        <img src="dane.jpg" alt="Dane" style="width:100px" onclick="imgclick('dane.jpg')">
+        <img src="beagle.jpg" alt="Beagle" style="width:100px" onclick="imgclick('beagle.jpg')">
+        <img src="snauzer.jpg" alt="Snauzer" style="width:100px" onclick="imgclick('snauzer.jpg')">
+      </div>
+
+      <br>
+
+      <div>
+        <label>Choose zoom</label>
+        <div style="width: 400px;">
+          <input class="mdl-slider mdl-js-slider" type="range" min="1" max="10" value="1" step="1" tabindex="0" onchange="zoomchange(this.value)">
+        </div>
+      </div>
+
+      <br>
+
+      <div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" style="font-size: large; width: 200px; height: 50px" onclick="apply()">Apply Changes</button>
+      </div>
+
+    </form>
+
+  </div>
+  <div class="mdl-cell mdl-cell--9-col">
+    <iframe src="picture.html" style="width:100%;height:99vh" frameborder="0"></iframe>
+  </div>
+</div>
+
+<!--
+https://images.spot.im/v1/production/phj6czto7p709vbh7kel
+https://www.what-dog.net/Images/faces2/scroll001.jpg
+-->
+
+
+
+</body>
+
+<script>
+  function imgclick(name) {
+    let img = new Image();
+    img.src = name;
+    console.log("img= " + name + " w = " + img.width + " h = " + img.height);
+  }
+
+  function dimclick(w, h) {
+    console.log("w = " + w + " h = " + h);
+  }
+
+  function zoomchange(z) {
+    console.log("zoom " + z);
+  }
+
+  function apply() {
+
+  }
+
+</script>
+
+</html>
