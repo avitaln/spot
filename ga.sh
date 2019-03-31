@@ -8,3 +8,4 @@ cp target/scala-2.12/spot-opt.js dist/spot$NEWVER.js
 git add dist/spot$NEWVER.js
 git commit -m "GA"
 git push
+echo $NEWVER > latest
