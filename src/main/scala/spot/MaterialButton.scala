@@ -5,14 +5,16 @@ import org.scalajs.dom.{Event, Node}
 import org.scalajs.dom.html.Button
 
 object MaterialButton {
+  val size = 300
+
   Styles.add(
-    """
+    s"""
       |.material_container {
       |  position: relative;
       |  color: black;
       |  border: 1px solid black;
-      |  width: 400px;
-      |  height: 400px;
+      |  width: ${size}px;
+      |  height: ${size}px;
       |  font-size: 32px;
       |}
       |
@@ -35,10 +37,10 @@ object MaterialButton {
     """.stripMargin
   )
 
-  @dom def apply(text: String, onClick: Event ⇒ Unit): Binding[Node] = {
+  @dom def apply(item: Item, onClick: Event ⇒ Unit): Binding[Node] = {
     <div class="material_container" onclick={ event: Event => onClick(event) }>
-      <img src={s"./src/main/resources/$text.png"} class="material_image" />
-      <div class="material_centered">{text.toUpperCase}</div>
+      <img src={item.fullImageUrl} class="material_image" />
+      <div class="material_centered">{item.name.toUpperCase}</div>
     </div>
   }
 }

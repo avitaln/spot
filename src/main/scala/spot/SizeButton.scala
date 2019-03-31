@@ -9,9 +9,7 @@ object SizeButton {
       |.size_button {
       |  color: black;
       |  border: 1px solid black;
-      |  width: 400px;
-      |  height: 400px;
-      |  font-size: 32px;
+      |  font-size: 16px;
       |  outline: none;
       |}
       |.size_button:active {
@@ -21,11 +19,13 @@ object SizeButton {
     """.stripMargin
   )
 
-  @dom def apply(w: Int, h: Int, onClick: Event ⇒ Unit): Binding[Node] = {
-    <button class="size_button" style={sizeStyle(w,h)} onclick={ event: Event => onClick(event) }>{s"$w x $h".toUpperCase}</button>
+  @dom def apply(orig: Dim, scaled: Dim, onClick: Event ⇒ Unit): Binding[Node] = {
+    println(s"orig = $orig scaled = $scaled")
+
+    <button class="size_button" style={sizeStyle(scaled)} onclick={ event: Event => onClick(event) }>{s"${orig.w} X ${orig.h}".toUpperCase}</button>
   }
 
-  def sizeStyle(w: Int, h: Int): String = {
-    s"width:${w*100}px;height:${h*100}px"
+  def sizeStyle(scaled: Dim): String = {
+    s"width:${scaled.w}px;height:${scaled.h}px"
   }
 }

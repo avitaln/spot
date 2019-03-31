@@ -5,9 +5,7 @@ import com.thoughtworks.binding.{Binding, dom}
 import org.scalajs.dom.Node
 
 object Toolbar {
-  @dom def apply(componentsAndSizes: Seq[(Binding[Node], Int)], gap: Int = 10): Binding[Node] = {
-    val components = componentsAndSizes.map(_._1)
-    val sizes = componentsAndSizes.map(_._2)
+  @dom def apply(components: Seq[Binding[Node]], sizes: Seq[Int], gap: Int = 10): Binding[Node] = {
     <div style={toolbarStyle(sizes, gap)}>
       {
       for (comp <- Vars.apply(components:_*)) yield {

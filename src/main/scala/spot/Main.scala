@@ -4,16 +4,21 @@ import com.thoughtworks.binding.Binding.{Var, Vars}
 import com.thoughtworks.binding.{Binding, dom}
 import org.scalajs.dom.{Node, document}
 
-
-
 object Main {
 
+  org.scalajs.dom.window.onmessage = (e) ⇒ {
+    import upickle.default._
+    val items = read[Items](e.data.toString)
+  }
+
   val step: Var[Step] = Var(Step.materials)
-  val chosenMaterlal: Var[Material] = Var(Material(""))
-  val chosenSize: Var[String] = Var("")
-  val materials: Vars[Material] = Vars.empty
+  val selectedProduct: Var[Option[Item]] = Var(None)
+  val chosenSize: Var[Option[Dim]] = Var(None)
+  val items: Vars[Item] = Vars.empty
 
   def main(args: Array[String]): Unit = {
+    items.value.appendAll(Items.dummy.items)
+
     val element = document.getElementById("main")
     dom.render(element, mainComponent)
   }
@@ -35,31 +40,37 @@ object Main {
   @dom
   def renderChooseSizes(): Binding[Node] = {
     <div>
-      <h1>Chosen material: {chosenMaterlal.bind.name}</h1>
+      <h1>Chosen material: {selectedProduct.bind.map(_.name).getOrElse("")}</h1>
       <h1>Choose Size</h1>
       {
-      Toolbar.apply(
-        Seq(
-          createSizeButton(1,1),
-          createSizeButton(2,2),
-          createSizeButton(3,3)
-        ), 40
-      ).bind
+        val x = selectedProduct.bind.map { item =>
+          val buttons = item.dimChoices.zip(item.dimChoicesScaled).map { case(orig, scaled) =>
+            createSizeButton(orig, scaled)
+          }
+          val sizes = List.fill(3)(item.largestWidth * item.scale) // 5 in a row
+          Toolbar.apply(buttons, sizes, 20)
+        }.getOrElse {
+          empty
+        }
+        x.bind
       }
     </div>
+  }
+
+  @dom def empty: Binding[Node] = {
+    <div>aaa</div>
   }
 
   @dom
   def renderChooseMaterial(): Binding[Node] = {
     <div>
-      <h1>Choose Material</h1>
+      <h1>בחר מוצר</h1>
       {
+      val boundItems = items.bind
+      val sizes = List.fill(3)(MaterialButton.size) // 3 in a row
+
       Toolbar.apply(
-        Seq(
-          createMaterialButton("wood"),
-          createMaterialButton("aluminum"),
-          createMaterialButton("glass")
-        )
+        items.bind.map(createMaterialButton), sizes
       ).bind
       }
     </div>
@@ -68,31 +79,30 @@ object Main {
   @dom
   def renderChooseImage(): Binding[Node] = {
     <div>
-      <h1>Chosen material: {chosenMaterlal.bind.name}</h1>
-      <h1>Chosen size: {chosenSize.bind}</h1>
+      <h1>Chosen material: {selectedProduct.bind.map(_.name).getOrElse("")}</h1>
+      <h1>Chosen size: {chosenSize.bind.map(d => s"${d.w} X ${d.h}").getOrElse("")}</h1>
       <h1>Choose Image</h1>
       {UploadImageButton(e => {}).bind}
     </div>
   }
 
-  def createMaterialButton(name: String): (Binding[Node], Int) =
-    MaterialButton(name, e => {
-      onSelectMaterial(Material(name))
-    }) → 400
+  def createMaterialButton(item: Item): Binding[Node] =
+    MaterialButton(item, e => {
+      onSelectMaterial(item)
+    })
 
-  def createSizeButton(w: Int, h: Int): (Binding[Node], Int) =
-    SizeButton(w, h, e => {
-      onSelectSize(s"$w x $h".toUpperCase)
-    }) → (w * 100)
+  def createSizeButton(orig: Dim, scaled: Dim): Binding[Node] = {
+    SizeButton(orig, scaled, e => onSelectSize(orig))
+  }
 
-  def onSelectMaterial(material: Material): Unit = {
-    chosenMaterlal.value = material
+  def onSelectMaterial(item: Item): Unit = {
+    selectedProduct.value = Some(item)
     step.value = Step.sizes
   }
 
-  def onSelectSize(size: String): Unit = {
+  def onSelectSize(dim: Dim): Unit = {
     step.value = Step.image
-    chosenSize.value = size
+    chosenSize.value = Some(dim)
   }
 }
 /*
