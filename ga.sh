@@ -6,6 +6,7 @@ cd ../avitaln.github.io && ./ga.sh $LASTVER $NEWVER
 sbt fullOptJS
 cp target/scala-2.12/spot-opt.js dist/spot$NEWVER.js
 git add dist/spot$NEWVER.js
+echo $NEWVER > latest
+git add latest
 git commit -m "GA"
 git push
-echo $NEWVER > latest
