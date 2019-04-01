@@ -16,6 +16,7 @@ object MaterialButton {
       |  width: ${size}px;
       |  height: ${size}px;
       |  font-size: 32px;
+      |  background: transparent;
       |}
       |
       |.material_centered {

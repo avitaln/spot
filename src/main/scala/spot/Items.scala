@@ -19,7 +19,7 @@ case class Item(id: String, name: String, media: String, choices: List[String]) 
 
   lazy val largestWidth = dimChoices.map(_.w).max
 
-  lazy val scale = 450 / largestWidth
+  lazy val scale = 300 / largestWidth
 
   lazy val dimChoicesScaled: List[Dim] = {
     dimChoices.map(d ⇒ Dim(d.w*scale, d.h*scale))

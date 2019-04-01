@@ -18,7 +18,7 @@ object Toolbar {
   private def toolbarStyle(sizes: Seq[Int], gap: Int) = {
     val sizesString = sizes.map(s ⇒ s"${s}px").mkString(" ")
     Seq(
-      "background: white",
+      "background: transparent",
       "width:100%",
       "display: grid",
       "align-items: left",

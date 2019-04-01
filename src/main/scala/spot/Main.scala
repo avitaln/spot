@@ -12,6 +12,7 @@ object Main {
     if (strMessage.startsWith("U")) {
       val url = strMessage.substring(1)
       println("IFRAME received uploaded URL = " + url)
+      step.value = Step.editingImage
     } else if (strMessage.startsWith("I")) {
       val items = read[Items](strMessage.substring(1))
     }
@@ -54,8 +55,8 @@ object Main {
           val buttons = item.dimChoices.zip(item.dimChoicesScaled).map { case(orig, scaled) =>
             createSizeButton(orig, scaled)
           }
-          val sizes = List.fill(3)(item.largestWidth * item.scale) // 5 in a row
-          Toolbar.apply(buttons, sizes, 20)
+          val sizes = List.fill(3)(item.largestWidth * item.scale) // 3 in a row
+          Toolbar.apply(buttons, sizes, 10)
         }.getOrElse {
           empty
         }
