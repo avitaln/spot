@@ -6,9 +6,15 @@ import org.scalajs.dom.{Node, document}
 
 object Main {
 
-  org.scalajs.dom.window.onmessage = (e) ⇒ {
+  org.scalajs.dom.window.onmessage = e ⇒ {
     import upickle.default._
-    val items = read[Items](e.data.toString)
+    val strMessage = e.data.toString
+    if (strMessage.startsWith("U")) {
+      val url = strMessage.substring(1)
+      println("IFRAME received uploaded URL = " + url)
+    } else if (strMessage.startsWith("I")) {
+      val items = read[Items](strMessage.substring(1))
+    }
   }
 
   val step: Var[Step] = Var(Step.materials)
@@ -30,7 +36,8 @@ object Main {
       val x = step.bind match {
       case Step.materials ⇒ renderChooseMaterial()
       case Step.sizes ⇒ renderChooseSizes()
-      case Step.image ⇒ renderChooseImage()
+      case Step.uploadingImage ⇒ renderImageUploading()
+      case Step.editingImage ⇒ renderEditImage()
       }
       x.bind
       }
@@ -77,12 +84,17 @@ object Main {
   }
 
   @dom
-  def renderChooseImage(): Binding[Node] = {
+  def renderImageUploading(): Binding[Node] = {
+    <div>
+    </div>
+  }
+
+  @dom
+  def renderEditImage(): Binding[Node] = {
     <div>
       <h1>Chosen material: {selectedProduct.bind.map(_.name).getOrElse("")}</h1>
       <h1>Chosen size: {chosenSize.bind.map(d => s"${d.w} X ${d.h}").getOrElse("")}</h1>
-      <h1>Choose Image</h1>
-      {UploadImageButton(e => {}).bind}
+      <h1>Image:</h1>
     </div>
   }
 
@@ -101,8 +113,9 @@ object Main {
   }
 
   def onSelectSize(dim: Dim): Unit = {
-    step.value = Step.image
+    step.value = Step.uploadingImage
     chosenSize.value = Some(dim)
+    org.scalajs.dom.window.parent.postMessage("upload", "*")
   }
 }
 /*
