@@ -3,7 +3,7 @@ package spot
 import com.thoughtworks.binding.{Binding, dom}
 import org.scalajs.dom.{Event, Node}
 
-object Button {
+object SelectionButton {
   //  border: 1px solid black;
   Styles.add(
     """

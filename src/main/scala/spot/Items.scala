@@ -2,7 +2,18 @@ package spot
 
 import upickle.default._
 
-case class Dim(w: Int, h: Int)
+case class Dim(w: Int, h: Int) {
+  def scaleTo(max: Int): Dim = {
+    if (w > h) {
+      val scale = max / w.toDouble
+      Dim(max, (h.toDouble * scale).toInt)
+    } else {
+      val scale = max / h.toDouble
+      Dim((w.toDouble * scale).toInt, max)
+    }
+  }
+  def toChoice = s"${w}X${h}"
+}
 case class Item(id: String, name: String, media: String, choices: List[String]) {
 
   lazy val fullImageUrl: String = {
@@ -22,7 +33,7 @@ case class Item(id: String, name: String, media: String, choices: List[String]) 
   lazy val scale = 300 / largestWidth
 
   lazy val dimChoicesScaled: List[Dim] = {
-    dimChoices.map(d ⇒ Dim(d.w*scale, d.h*scale))
+    dimChoices.map(_.scaleTo(SizeButton.width))
   }
 
 }

@@ -12,11 +12,12 @@ object MaterialButton {
       |.material_container {
       |  position: relative;
       |  color: black;
-      |  border: 1px solid black;
+      |  border: none;
       |  width: ${size}px;
       |  height: ${size}px;
       |  font-size: 32px;
       |  background: transparent;
+      |  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       |}
       |
       |.material_centered {
