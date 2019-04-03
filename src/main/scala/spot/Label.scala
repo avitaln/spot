@@ -1,0 +1,5 @@
+package spot
+
+class Label {
+
+}
