@@ -194,7 +194,7 @@ class ImageEditor extends HTMLElement {
 }
 
 
-customElements.define('image-editor', WixDefaultCustomElement);
+customElements.define('image-editor', ImageEditor);
 
 
 
